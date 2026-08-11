@@ -1,0 +1,261 @@
+/* 1. 网页侧边悬浮工具栏样式 */
+#fbs-float-bar {
+  position: fixed;
+  right: 15px;
+  top: 30%;
+  width: 46px;
+  background: #ffffff;
+  border-radius: 23px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 99999998;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  box-sizing: border-box;
+  user-select: none;
+  border: 1px solid #e4e6eb;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.fbs-float-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 8px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.fbs-float-btn:hover {
+  background: #f2f3f5;
+}
+
+.fbs-float-btn:last-child {
+  margin-bottom: 0;
+}
+
+.fbs-tooltip {
+  visibility: hidden;
+  position: absolute;
+  right: 48px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  font-family: sans-serif;
+}
+
+.fbs-float-btn:hover .fbs-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* 悬浮栏拖拽手柄 */
+#fbs-drag-handle {
+  width: 100%;
+  height: 12px;
+  cursor: move;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0 6px 0;
+}
+.fbs-drag-line {
+  width: 16px;
+  height: 2px;
+  background: #bcc0c4;
+  border-radius: 1px;
+}
+
+/* 2. 自由截图蒙版和框 */
+#fbs-select-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.4);
+  z-index: 99999999;
+  cursor: crosshair;
+}
+
+#fbs-select-box {
+  border: 2px dashed #1877f2;
+  position: absolute;
+  background: rgba(24,119,242,0.15);
+  display: none;
+  pointer-events: none;
+}
+
+/* 3. 保存悬浮确认卡片样式 */
+#fbs-modal {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 340px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  z-index: 999999999;
+  font-family: system-ui, -apple-system, sans-serif;
+  padding: 16px;
+  box-sizing: border-box;
+  border: 1px solid #dddfe2;
+  animation: fbs-slide 0.25s ease-out;
+  color: #1c1e21;
+}
+
+@keyframes fbs-slide {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.fbs-modal-title {
+  font-weight: bold;
+  font-size: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fbs-modal-close {
+  cursor: pointer;
+  font-size: 20px;
+  color: #999;
+}
+
+.fbs-preview-container {
+  width: 100%;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f2f5;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border: 1px solid #e4e6eb;
+}
+
+.fbs-preview-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.fbs-label {
+  font-size: 11px;
+  color: #65676b;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.fbs-input {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 6px !important;
+  padding: 8px !important;
+  font-size: 13px !important;
+  margin-bottom: 10px !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+.fbs-input:focus {
+  border-color: #1877f2 !important;
+  outline: none !important;
+}
+
+.fbs-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.fbs-btn {
+  background: #1877f2 !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  font-size: 13px !important;
+}
+
+.fbs-btn:hover {
+  background: #166fe5 !important;
+}
+
+.fbs-btn-sec {
+  background: #e4e6eb !important;
+  color: #050505 !important;
+}
+
+.fbs-btn-sec:hover {
+  background: #d8dadf !important;
+}
+
+/* 绿色“保存并继续”样式 */
+.fbs-btn-green {
+  background: #24b263 !important;
+  color: #ffffff !important;
+}
+
+.fbs-btn-green:hover {
+  background: #1e9651 !important;
+}
+
+#fbs-state {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 8px;
+  display: none;
+}
+
+/* 4. 后台上传非阻塞提示 Toast 样式 */
+#fbs-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 22px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.85);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: bold;
+  z-index: 1000000000;
+  pointer-events: none;
+  font-family: system-ui, -apple-system, sans-serif;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fbs-toast-show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.fbs-toast-hide {
+  opacity: 0;
+  transform: translate(-50%, -20px);
+}
