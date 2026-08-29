@@ -3,13 +3,7 @@ name: Release Extension
 on:
   push:
     tags:
-      - 'v*'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: '发布的版本号（例如 v1.0.0）'
-        required: true
-        default: 'v1.0.0'
+      - 'v*' # 仅在打版本标签时严格触发
 
 permissions:
   contents: write
@@ -23,24 +17,22 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 1. 将插件核心文件打包成 zip
+      # 1. 打包插件文件
       - name: Package Chrome Extension
         run: |
           mkdir -p dist
           zip -r dist/extension.zip manifest.json background.js content.css content.js icon.png popup.html popup.js apps_script.gs
 
-      # 2. 生成 SLSA 构件证明
+      # 2. 生成对应当前 Tag 的构件证明
       - name: Generate Artifact Attestation
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: 'dist/extension.zip'
 
-      # 3. 创建 Release 并上传 extension.zip
+      # 3. 自动创建/更新 Release 并挂载压缩包
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event.inputs.version || github.ref_name }}
-          name: Release ${{ github.event.inputs.version || github.ref_name }}
           files: dist/extension.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
