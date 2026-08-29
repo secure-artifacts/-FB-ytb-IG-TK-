@@ -1,60 +1,46 @@
-name: 打包并发布插件
+name: Release Extension
 
-# 当你推送一个 v 开头的 tag 时自动触发
-# 例如：git tag v2.1 && git push origin v2.1
 on:
   push:
     tags:
-      - "v*"
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '发布的版本号（例如 v1.0.0）'
+        required: true
+        default: 'v1.0.0'
 
-# SLSA 构件证明必须要这三个权限
 permissions:
-  contents: write        # 创建 Release、上传附件
-  id-token: write        # 生成 OIDC token（attestation 必须）
-  attestations: write    # 写入构件证明
+  contents: write
+  id-token: write
+  attestations: write
 
 jobs:
-  release:
+  build-and-release:
     runs-on: ubuntu-latest
-
     steps:
-      # 1. 拉取代码
-      - name: 检出代码
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. 把插件文件打包成 zip（排除 .git 和 workflow 自身）
-      - name: 打包插件文件
+      # 1. 将插件核心文件打包成 zip
+      - name: Package Chrome Extension
         run: |
-          zip -r screenshot-extension.zip . \
-            --exclude ".git/*" \
-            --exclude ".github/*" \
-            --exclude "*.zip"
-          echo "打包完成，文件列表："
-          zipinfo screenshot-extension.zip
+          mkdir -p dist
+          zip -r dist/extension.zip manifest.json background.js content.css content.js icon.png popup.html popup.js apps_script.gs
 
-      # 3. 生成 SLSA 构件证明（解决截图里的"未通过"问题）
-      - name: 生成构件证明
+      # 2. 生成 SLSA 构件证明
+      - name: Generate Artifact Attestation
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: screenshot-extension.zip
+          subject-path: 'dist/extension.zip'
 
-      # 4. 发布 Release 并上传 zip
-      - name: 创建 Release
+      # 3. 创建 Release 并上传 extension.zip
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "智能截图助手 ${{ github.ref_name }}"
-          body: |
-            ## 📸 智能截图助手 Pro — ${{ github.ref_name }}
-
-            ### 安装方法
-            1. 下载下方的 `screenshot-extension.zip`
-            2. 解压到本地文件夹
-            3. 打开 Chrome，访问 `chrome://extensions`
-            4. 开启右上角「开发者模式」
-            5. 点击「加载已解压的扩展程序」，选择解压后的文件夹
-
-            ### 配置说明
-            - 在插件 popup「基础配置」填入 GAS 链接、表格 ID、网盘 ID
-            - 支持平台：Facebook · YouTube · Instagram · TikTok · Pinterest · Behance · Dribbble · Flickr
-          files: screenshot-extension.zip
-          generate_release_notes: false
+          tag_name: ${{ github.event.inputs.version || github.ref_name }}
+          name: Release ${{ github.event.inputs.version || github.ref_name }}
+          files: dist/extension.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
