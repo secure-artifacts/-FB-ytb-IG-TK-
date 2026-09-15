@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "智能截图助手 Pro (多平台版)",
-  "version": "2.0",
-  "description": "支持 Facebook、YouTube、Instagram、TikTok、Pinterest 等多平台。一键截图，自动保存至 Google Drive 并同步 Google Sheets",
+  "name": "智能截图助手 Pro",
+  "version": "2.1",
+  "description": "支持 Facebook、YouTube、Instagram、TikTok、Pinterest 等多平台一键截图，自动保存至 Google Drive 并同步 Google Sheets",
   "permissions": [
     "activeTab",
     "scripting",
@@ -20,7 +20,10 @@
     "https://*.dribbble.com/*",
     "https://*.flickr.com/*",
     "https://script.google.com/*",
-    "https://script.googleusercontent.com/*"
+    "https://script.googleusercontent.com/*",
+    "https://api.ocr.space/*",
+    "https://api.groq.com/*",
+    "https://translate.googleapis.com/*"
   ],
   "background": {
     "service_worker": "background.js"
